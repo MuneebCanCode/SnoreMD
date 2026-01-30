@@ -1,0 +1,29 @@
+{
+  "name": "snoremd-backend",
+  "version": "1.0.0",
+  "description": "Backend Lambda functions for Snore MD Patient Notes",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "node build-lambda.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src --ext .ts",
+    "seed": "node dist/scripts/seedDemoData.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.978.0",
+    "@aws-sdk/lib-dynamodb": "^3.978.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.133",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.11.5",
+    "@types/uuid": "^9.0.7",
+    "esbuild": "^0.27.2",
+    "fast-check": "^3.15.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.3"
+  }
+}

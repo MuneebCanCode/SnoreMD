@@ -1,0 +1,168 @@
+{
+  "auth": {
+    "user_pool_id": "us-east-1_2qAOZwArA",
+    "aws_region": "us-east-1",
+    "user_pool_client_id": "3ge6fotmiliikuedm8ihk0o3nq",
+    "identity_pool_id": "us-east-1:451645d0-435f-49c7-b565-0c00edbb7f3b",
+    "mfa_methods": [],
+    "standard_required_attributes": [
+      "email"
+    ],
+    "username_attributes": [
+      "email"
+    ],
+    "user_verification_types": [
+      "email"
+    ],
+    "groups": [],
+    "mfa_configuration": "NONE",
+    "password_policy": {
+      "min_length": 8,
+      "require_lowercase": true,
+      "require_numbers": true,
+      "require_symbols": true,
+      "require_uppercase": true
+    },
+    "unauthenticated_identities_enabled": true
+  },
+  "data": {
+    "url": "https://vlaym66mkffrrgbnqsirddenuq.appsync-api.us-east-1.amazonaws.com/graphql",
+    "aws_region": "us-east-1",
+    "default_authorization_type": "AMAZON_COGNITO_USER_POOLS",
+    "authorization_types": [
+      "AWS_IAM"
+    ],
+    "model_introspection": {
+      "version": 1,
+      "models": {
+        "PatientNote": {
+          "name": "PatientNote",
+          "fields": {
+            "id": {
+              "name": "id",
+              "isArray": false,
+              "type": "ID",
+              "isRequired": true,
+              "attributes": []
+            },
+            "patientId": {
+              "name": "patientId",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true,
+              "attributes": []
+            },
+            "noteText": {
+              "name": "noteText",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true,
+              "attributes": []
+            },
+            "sleepStudyId": {
+              "name": "sleepStudyId",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false,
+              "attributes": []
+            },
+            "clinicId": {
+              "name": "clinicId",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true,
+              "attributes": []
+            },
+            "createdBy": {
+              "name": "createdBy",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true,
+              "attributes": []
+            },
+            "createdAt": {
+              "name": "createdAt",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": true,
+              "attributes": []
+            },
+            "updatedAt": {
+              "name": "updatedAt",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": false,
+              "attributes": [],
+              "isReadOnly": true
+            }
+          },
+          "syncable": true,
+          "pluralName": "PatientNotes",
+          "attributes": [
+            {
+              "type": "model",
+              "properties": {}
+            },
+            {
+              "type": "key",
+              "properties": {
+                "name": "patientNotesByPatientIdAndCreatedAt",
+                "queryField": "notesByPatient",
+                "fields": [
+                  "patientId",
+                  "createdAt"
+                ]
+              }
+            },
+            {
+              "type": "key",
+              "properties": {
+                "name": "patientNotesByClinicIdAndCreatedAt",
+                "queryField": "notesByClinic",
+                "fields": [
+                  "clinicId",
+                  "createdAt"
+                ]
+              }
+            },
+            {
+              "type": "key",
+              "properties": {
+                "name": "patientNotesByCreatedByAndCreatedAt",
+                "queryField": "notesByClinician",
+                "fields": [
+                  "createdBy",
+                  "createdAt"
+                ]
+              }
+            },
+            {
+              "type": "auth",
+              "properties": {
+                "rules": [
+                  {
+                    "allow": "private",
+                    "operations": [
+                      "create",
+                      "update",
+                      "delete",
+                      "read"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "primaryKeyInfo": {
+            "isCustomPrimaryKey": false,
+            "primaryKeyFieldName": "id",
+            "sortKeyFieldNames": []
+          }
+        }
+      },
+      "enums": {},
+      "nonModels": {}
+    }
+  },
+  "version": "1.4"
+}
