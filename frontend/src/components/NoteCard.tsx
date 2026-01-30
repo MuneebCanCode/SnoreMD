@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Note } from '../types';
 
 interface NoteCardProps {
@@ -6,6 +7,8 @@ interface NoteCardProps {
 }
 
 export const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
+  const navigate = useNavigate();
+
   const formatDate = (isoString: string): string => {
     const date = new Date(isoString);
     return date.toLocaleString('en-US', {
@@ -18,13 +21,13 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
   };
 
   const handleViewNote = () => {
-    // Open note in a new tab
-    window.open(`/note/${note.patientId}/${note.noteId}`, '_blank');
+    // Navigate to note detail view in the same tab
+    navigate(`/note/${note.patientId}/${note.noteId}`);
   };
 
   const handleEditNote = () => {
-    // Open edit note in a new tab
-    window.open(`/edit/${note.patientId}/${note.noteId}`, '_blank');
+    // Navigate to edit note view in the same tab
+    navigate(`/edit/${note.patientId}/${note.noteId}`);
   };
 
   return (
