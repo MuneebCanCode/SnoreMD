@@ -73,10 +73,6 @@ export const NoteForm: React.FC<NoteFormProps> = ({ patientId, onSubmit, loading
         </div>
       </div>
 
-      <div className="info-message" style={{ fontSize: '0.9rem', marginBottom: '1rem' }}>
-        Sleep Study ID will be automatically generated (e.g., {patientId}-S001)
-      </div>
-
       {validationError && <div className="error-message">{validationError}</div>}
       {submitError && <div className="error-message">{submitError}</div>}
 
