@@ -67,16 +67,22 @@ async function createNote(note: SeedNote): Promise<void> {
 
 /**
  * Generate demo data and seed DynamoDB
- * New ID Format:
- * - Clinics: C001-C100
- * - Clinicians: M001-M100
- * - Patients: P0001-P1000
- * 
- * Structure:
- * - 10 clinics (C001-C010)
- * - 10 clinicians (M001-M010), 1 per clinic
- * - 20 patients (P0001-P0020), 2 per clinician
- * - 40 notes, 2 per patient
+ * New Structure:
+ * - 10 clinics (clinic-001 to clinic-010)
+ * - 20 clinicians (2 per clinic)
+ *   - Clinic 1: clinic-001-user-001, clinic-001-user-002
+ *   - Clinic 2: clinic-002-user-001, clinic-002-user-002
+ *   - etc.
+ * - 40 patients (P0001 to P0040), 2 per clinician
+ *   - clinic-001-user-001 → P0001, P0002
+ *   - clinic-001-user-002 → P0003, P0004
+ *   - clinic-002-user-001 → P0005, P0006
+ *   - clinic-002-user-002 → P0007, P0008
+ *   - etc.
+ * - 80 notes (2 per patient)
+ *   - P0001: P0001-S001, P0001-S002
+ *   - P0002: P0002-S001, P0002-S002
+ *   - etc.
  */
 async function seedDemoData(): Promise<void> {
   console.log('Starting demo data seeding...');
@@ -87,74 +93,66 @@ async function seedDemoData(): Promise<void> {
 
   // Generate data for 10 clinics
   for (let clinicNum = 1; clinicNum <= 10; clinicNum++) {
-    const clinicId = `C${String(clinicNum).padStart(3, '0')}`; // C001, C002, etc.
-    const clinicianId = `M${String(clinicNum).padStart(3, '0')}`; // M001, M002, etc.
+    const clinicId = `clinic-${String(clinicNum).padStart(3, '0')}`; // clinic-001, clinic-002, etc.
 
-    // Generate 2 patients per clinician
-    for (let patientNum = 1; patientNum <= 2; patientNum++) {
-      const patientId = `P${String(patientCounter).padStart(4, '0')}`; // P0001, P0002, etc.
-      patientCounter++;
+    // Each clinic has 2 clinicians
+    for (let clinicianNum = 1; clinicianNum <= 2; clinicianNum++) {
+      const clinicianId = `${clinicId}-user-${String(clinicianNum).padStart(3, '0')}`; // clinic-001-user-001, etc.
 
-      // Generate 2 notes per patient
-      for (let noteNum = 1; noteNum <= 2; noteNum++) {
-        const noteId = uuidv4();
-        const daysAgo = (clinicNum - 1) * 2 + patientNum + noteNum;
-        const createdAt = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000).toISOString();
-        
-        // Sleep Study ID will be assigned after sorting by date
-        const note: SeedNote = {
-          patientId,
-          noteId,
-          noteText: `Follow-up note ${noteNum} for patient ${patientId}. Patient shows ${
-            noteNum === 1 ? 'good progress' : 'continued improvement'
-          } with sleep therapy. ${
-            clinicNum % 2 === 0
-              ? 'Recommend follow-up in 3 months.'
-              : 'Continue current treatment plan.'
-          }`,
-          sleepStudyId: '', // Will be assigned after sorting
-          createdBy: clinicianId,
-          createdAt,
-          clinicId,
-        };
+      // Each clinician handles 2 patients
+      for (let patientNum = 1; patientNum <= 2; patientNum++) {
+        const patientId = `P${String(patientCounter).padStart(4, '0')}`; // P0001, P0002, etc.
+        patientCounter++;
 
-        notes.push(note);
+        // Generate 2 notes per patient
+        for (let noteNum = 1; noteNum <= 2; noteNum++) {
+          const noteId = uuidv4();
+          // Create notes with different timestamps (older notes first)
+          const daysAgo = (patientCounter - 1) * 2 + (2 - noteNum); // Older notes have higher daysAgo
+          const createdAt = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000).toISOString();
+          
+          // Assign Sleep Study ID: first note gets S001, second gets S002
+          const sleepStudyId = `${patientId}-S${String(noteNum).padStart(3, '0')}`;
+
+          const note: SeedNote = {
+            patientId,
+            noteId,
+            noteText: `Follow-up note ${noteNum} for patient ${patientId}. Patient shows ${
+              noteNum === 1 ? 'good progress' : 'continued improvement'
+            } with sleep therapy. ${
+              clinicNum % 2 === 0
+                ? 'Recommend follow-up in 3 months.'
+                : 'Continue current treatment plan.'
+            }`,
+            sleepStudyId,
+            createdBy: clinicianId,
+            createdAt,
+            clinicId,
+          };
+
+          notes.push(note);
+        }
       }
     }
   }
 
-  // Sort notes by patient and creation date to assign Sleep Study IDs chronologically
-  // Group notes by patient
-  const notesByPatient = new Map<string, SeedNote[]>();
-  for (const note of notes) {
-    if (!notesByPatient.has(note.patientId)) {
-      notesByPatient.set(note.patientId, []);
-    }
-    notesByPatient.get(note.patientId)!.push(note);
-  }
-
-  // For each patient, sort notes by createdAt (oldest first) and assign Sleep Study IDs
-  for (const [patientId, patientNotes] of notesByPatient.entries()) {
-    // Sort by createdAt ascending (oldest first)
-    patientNotes.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-    
-    // Assign Sleep Study IDs: oldest note gets S001, next gets S002, etc.
-    patientNotes.forEach((note, index) => {
-      note.sleepStudyId = `${patientId}-S${String(index + 1).padStart(3, '0')}`;
-    });
-  }
-
   console.log(`Generated ${notes.length} notes to seed`);
   console.log('Structure:');
-  console.log('  - 10 clinics (C001 to C010)');
-  console.log('  - 10 clinicians (M001 to M010, one per clinic)');
-  console.log('  - 20 patients (P0001 to P0020, 2 per clinician)');
-  console.log('  - 40 notes (2 per patient)');
+  console.log('  - 10 clinics (clinic-001 to clinic-010)');
+  console.log('  - 20 clinicians (2 per clinic)');
+  console.log('  - 40 patients (P0001 to P0040, 2 per clinician)');
+  console.log('  - 80 notes (2 per patient)');
   console.log('');
   console.log('Patient-Clinician-Clinic Mapping:');
-  console.log('  P0001, P0002 → M001 → C001');
-  console.log('  P0003, P0004 → M002 → C002');
-  console.log('  P0005, P0006 → M003 → C003');
+  console.log('  P0001, P0002 → clinic-001-user-001 → clinic-001');
+  console.log('  P0003, P0004 → clinic-001-user-002 → clinic-001');
+  console.log('  P0005, P0006 → clinic-002-user-001 → clinic-002');
+  console.log('  P0007, P0008 → clinic-002-user-002 → clinic-002');
+  console.log('  ... and so on');
+  console.log('');
+  console.log('Sleep Study ID Pattern:');
+  console.log('  P0001: P0001-S001, P0001-S002');
+  console.log('  P0002: P0002-S001, P0002-S002');
   console.log('  ... and so on');
   console.log('');
 
@@ -178,9 +176,9 @@ async function seedDemoData(): Promise<void> {
   console.log(`  - Skipped: ${skipped} notes (already existed)`);
   console.log('');
   console.log('Example patient IDs to try in the frontend:');
-  console.log('  - P0001 (Clinic C001, Clinician M001)');
-  console.log('  - P0005 (Clinic C003, Clinician M003)');
-  console.log('  - P0010 (Clinic C005, Clinician M005)');
+  console.log('  - P0001 (clinic-001, clinic-001-user-001)');
+  console.log('  - P0005 (clinic-002, clinic-002-user-001)');
+  console.log('  - P0010 (clinic-003, clinic-003-user-002)');
 }
 
 // Run seeding if executed directly
