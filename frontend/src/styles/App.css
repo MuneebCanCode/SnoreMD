@@ -497,3 +497,15 @@ body {
     font-size: 1.25rem;
   }
 }
+
+/* Hide Amplify Authenticator loading overlay */
+[data-amplify-authenticator] [data-amplify-router] {
+  transition: none !important;
+}
+
+/* Hide any loading spinners or overlays */
+.amplify-loader,
+[class*="amplify-loader"],
+[class*="loading-overlay"] {
+  display: none !important;
+}
