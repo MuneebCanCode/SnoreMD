@@ -226,12 +226,11 @@ export class DynamoDBService {
         Key: {
           patientId: patientId,
         },
-        UpdateExpression: 'SET #counter = if_not_exists(#counter, :start) + :increment',
+        UpdateExpression: 'ADD #counter :increment',
         ExpressionAttributeNames: {
           '#counter': 'counter',
         },
         ExpressionAttributeValues: {
-          ':start': 0,
           ':increment': 1,
         },
         ReturnValues: 'UPDATED_NEW',

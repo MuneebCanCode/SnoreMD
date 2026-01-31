@@ -59,8 +59,8 @@ async function verifyP0001Notes(): Promise<void> {
     const counterResult = await docClient.send(getCounterCommand);
     
     if (counterResult.Item) {
-      console.log(`Current counter value: ${counterResult.Item.currentCounter}`);
-      console.log(`Next Sleep Study ID will be: P0001-S${String(counterResult.Item.currentCounter + 1).padStart(3, '0')}`);
+      console.log(`Current counter value: ${counterResult.Item.counter}`);
+      console.log(`Next Sleep Study ID will be: P0001-S${String(counterResult.Item.counter + 1).padStart(3, '0')}`);
     } else {
       console.log('No counter found for P0001');
     }
