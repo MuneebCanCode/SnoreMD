@@ -175,7 +175,7 @@ export const NoteDetailView: React.FC = () => {
             <span className="note-detail-date">{formatDate(note.createdAt)}</span>
             {!isEditing && (
               <button onClick={handleEditClick} className="edit-note-btn">
-                ✏️ Edit Note
+                Edit Note
               </button>
             )}
           </div>
@@ -237,14 +237,14 @@ export const NoteDetailView: React.FC = () => {
                 className="save-changes-btn"
                 disabled={saving || !editNoteText.trim()}
               >
-                {saving ? '💾 Saving...' : '💾 Save Changes'}
+                {saving ? 'Saving...' : 'Save Changes'}
               </button>
               <button
                 onClick={handleCancelEdit}
                 className="cancel-edit-btn"
                 disabled={saving}
               >
-                ✖ Cancel
+                Cancel
               </button>
             </div>
           </div>

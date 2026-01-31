@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Note } from '../types';
 
 interface NoteCardProps {
@@ -7,8 +7,6 @@ interface NoteCardProps {
 }
 
 export const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
-  const navigate = useNavigate();
-
   const formatDate = (isoString: string): string => {
     const date = new Date(isoString);
     return date.toLocaleString('en-US', {
@@ -18,16 +16,6 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
       hour: '2-digit',
       minute: '2-digit',
     });
-  };
-
-  const handleViewNote = () => {
-    // Navigate to note detail view in the same tab
-    navigate(`/note/${note.patientId}/${note.noteId}`);
-  };
-
-  const handleEditNote = () => {
-    // Navigate to edit note view in the same tab
-    navigate(`/edit/${note.patientId}/${note.noteId}`);
   };
 
   return (
@@ -58,12 +46,12 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
           )}
         </div>
         <div className="note-actions">
-          <button onClick={handleViewNote} className="view-note-button">
+          <Link to={`/note/${note.patientId}/${note.noteId}`} className="view-note-button">
             View Full Note
-          </button>
-          <button onClick={handleEditNote} className="edit-note-button">
+          </Link>
+          <Link to={`/edit/${note.patientId}/${note.noteId}`} className="edit-note-button">
             Edit Note
-          </button>
+          </Link>
         </div>
       </div>
     </div>

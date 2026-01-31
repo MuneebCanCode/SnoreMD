@@ -1,6 +1,6 @@
 .edit-note-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #ffffff;
   padding: 2rem;
 }
 
@@ -10,10 +10,9 @@
 }
 
 .edit-note-header h1 {
-  color: white;
+  color: #333;
   font-size: 2.5rem;
   margin: 0;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .edit-note-card {
@@ -225,9 +224,9 @@
 }
 
 .back-button {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: #667eea;
   color: white;
-  border: 2px solid white;
+  border: 2px solid #667eea;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-size: 1rem;
@@ -238,7 +237,8 @@
 }
 
 .back-button:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: #5568d3;
+  border-color: #5568d3;
   transform: translateX(-5px);
 }
 
