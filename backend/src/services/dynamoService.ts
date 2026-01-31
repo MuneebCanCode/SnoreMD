@@ -222,6 +222,7 @@ export class DynamoDBService {
     try {
       const command = new QueryCommand({
         TableName: TABLE_NAME,
+        IndexName: 'CreatedAtIndex',
         KeyConditionExpression: 'patientId = :patientId',
         ExpressionAttributeValues: {
           ':patientId': patientId,
@@ -230,6 +231,7 @@ export class DynamoDBService {
       });
 
       const result = await docClient.send(command);
+      console.log(`Query result for patient ${patientId}: Count = ${result.Count}`);
       return result.Count || 0;
     } catch (error) {
       console.error('Error getting patient note count:', error);
