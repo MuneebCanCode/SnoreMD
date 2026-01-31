@@ -29,6 +29,18 @@ export class SnoreMdNotesStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY, // For development only
     });
 
+    // Counter Table for Sleep Study ID sequencing
+    const counterTable = new dynamodb.Table(this, 'SleepStudyCounterTable', {
+      tableName: 'SleepStudyCounters',
+      partitionKey: {
+        name: 'patientId',
+        type: dynamodb.AttributeType.STRING,
+      },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      encryption: dynamodb.TableEncryption.AWS_MANAGED,
+      removalPolicy: cdk.RemovalPolicy.DESTROY, // For development only
+    });
+
     // Add Global Secondary Index for querying by createdAt
     notesTable.addGlobalSecondaryIndex({
       indexName: 'CreatedAtIndex',
@@ -76,6 +88,7 @@ export class SnoreMdNotesStack extends cdk.Stack {
     // ========================================
     const lambdaEnvironment = {
       TABLE_NAME: notesTable.tableName,
+      COUNTER_TABLE_NAME: counterTable.tableName,
     };
 
     // Create Note Lambda
@@ -115,6 +128,9 @@ export class SnoreMdNotesStack extends cdk.Stack {
     notesTable.grantWriteData(createNoteLambda);
     notesTable.grantReadData(getNotesLambda);
     notesTable.grantReadWriteData(updateNoteLambda);
+    
+    // Grant counter table permissions to createNoteLambda
+    counterTable.grantReadWriteData(createNoteLambda);
     
     // Grant explicit permission to query the GSI
     getNotesLambda.addToRolePolicy(new cdk.aws_iam.PolicyStatement({

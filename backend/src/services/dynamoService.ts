@@ -7,6 +7,7 @@ const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
 
 const TABLE_NAME = process.env.TABLE_NAME || 'PatientFollowupNotes';
+const COUNTER_TABLE_NAME = process.env.COUNTER_TABLE_NAME || 'SleepStudyCounters';
 
 export class DynamoDBService {
   /**
@@ -215,45 +216,32 @@ export class DynamoDBService {
     }
   }
   /**
-   * Get the highest Sleep Study ID sequence number for a patient
-   * Used to generate sequential Sleep Study IDs
-   * Returns the next sequence number to use
+   * Get the next Sleep Study ID sequence number for a patient using atomic counter
+   * This ensures unique sequential IDs even with concurrent requests
    */
   async getNextSleepStudySequence(patientId: string): Promise<number> {
     try {
-      // Query all notes for this patient to find the highest sequence number
-      const command = new QueryCommand({
-        TableName: TABLE_NAME,
-        IndexName: 'CreatedAtIndex',
-        KeyConditionExpression: 'patientId = :patientId',
-        ExpressionAttributeValues: {
-          ':patientId': patientId,
+      const command = new UpdateCommand({
+        TableName: COUNTER_TABLE_NAME,
+        Key: {
+          patientId: patientId,
         },
-        ProjectionExpression: 'sleepStudyId',
+        UpdateExpression: 'SET #counter = if_not_exists(#counter, :start) + :increment',
+        ExpressionAttributeNames: {
+          '#counter': 'counter',
+        },
+        ExpressionAttributeValues: {
+          ':start': 0,
+          ':increment': 1,
+        },
+        ReturnValues: 'UPDATED_NEW',
       });
 
       const result = await docClient.send(command);
-      const notes = result.Items || [];
+      const newCounter = result.Attributes?.counter as number;
       
-      console.log(`Found ${notes.length} existing notes for patient ${patientId}`);
-
-      // Extract sequence numbers from existing Sleep Study IDs
-      let maxSequence = 0;
-      for (const note of notes) {
-        if (note.sleepStudyId) {
-          // Extract sequence number from format: P0005-S001
-          const match = note.sleepStudyId.match(/-S(\d+)$/);
-          if (match) {
-            const sequence = parseInt(match[1], 10);
-            if (sequence > maxSequence) {
-              maxSequence = sequence;
-            }
-          }
-        }
-      }
-
-      console.log(`Highest existing sequence for patient ${patientId}: ${maxSequence}`);
-      return maxSequence + 1;
+      console.log(`Atomic counter for patient ${patientId}: ${newCounter}`);
+      return newCounter;
     } catch (error) {
       console.error('Error getting next sleep study sequence:', error);
       throw new Error('Failed to get next sleep study sequence from DynamoDB');

@@ -69,7 +69,7 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<APIGateway
     const trimmedNoteText = validationService.trimNoteText(requestData.noteText);
 
     // Auto-generate Sleep Study ID in format: {PatientID}-S{SequenceNumber}
-    // Get the next sequence number for this patient
+    // Get the next sequence number for this patient using atomic counter
     let sequenceNumber = 1;
     try {
       sequenceNumber = await dynamoDBService.getNextSleepStudySequence(patientId!);
@@ -80,7 +80,7 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<APIGateway
       sequenceNumber = 1;
     }
     
-    const sleepStudyId = `${patientId}-S${sequenceNumber.toString().padStart(4, '0')}`; // S0001, S0002, etc.
+    const sleepStudyId = `${patientId}-S${sequenceNumber.toString().padStart(3, '0')}`; // S001, S002, etc.
     console.log(`Generated Sleep Study ID: ${sleepStudyId}`);
 
     // Create note object
