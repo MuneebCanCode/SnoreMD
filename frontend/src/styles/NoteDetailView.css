@@ -1,6 +1,6 @@
 .note-detail-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+  background: #f8f9fa;
   padding: 2rem;
 }
 
@@ -10,7 +10,7 @@
 }
 
 .back-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
   color: white;
   border: none;
   padding: 0.875rem 1.75rem;
@@ -20,12 +20,12 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 1rem;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.2);
 }
 
 .back-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 16px rgba(30, 58, 138, 0.3);
 }
 
 .note-detail-header h1 {
@@ -105,7 +105,7 @@
   background-color: #f9fafb;
   padding: 1.5rem;
   border-radius: 8px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #3b82f6;
   font-size: 1.1rem;
   line-height: 1.8;
   color: #333;
@@ -142,7 +142,7 @@
 .detail-value.note-id {
   font-family: 'Courier New', monospace;
   font-size: 0.95rem;
-  color: #667eea;
+  color: #3b82f6;
   word-break: break-all;
 }
 
@@ -219,7 +219,7 @@
 
 /* Edit Note Button */
 .edit-note-btn {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
   color: white;
   padding: 0.875rem 1.75rem;
   border: none;
@@ -228,12 +228,12 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(245, 87, 108, 0.3);
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
 }
 
 .edit-note-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(245, 87, 108, 0.4);
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
 }
 
 /* Success/Error Banners */
@@ -269,7 +269,7 @@
 .edit-textarea {
   width: 100%;
   padding: 1rem;
-  border: 2px solid #667eea;
+  border: 2px solid #3b82f6;
   border-radius: 8px;
   font-size: 1.1rem;
   line-height: 1.8;
@@ -281,8 +281,8 @@
 
 .edit-textarea:focus {
   outline: none;
-  border-color: #764ba2;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #1e3a8a;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .char-count-inline {
@@ -294,7 +294,7 @@
 .edit-input-inline {
   width: 100%;
   padding: 0.5rem;
-  border: 2px solid #667eea;
+  border: 2px solid #3b82f6;
   border-radius: 4px;
   font-size: 1rem;
   font-family: inherit;
@@ -303,8 +303,8 @@
 
 .edit-input-inline:focus {
   outline: none;
-  border-color: #764ba2;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #1e3a8a;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 /* Edit Actions */
@@ -329,14 +329,14 @@
 }
 
 .save-changes-btn {
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
   color: white;
-  box-shadow: 0 2px 8px rgba(56, 239, 125, 0.3);
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.2);
 }
 
 .save-changes-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(56, 239, 125, 0.4);
+  box-shadow: 0 4px 16px rgba(30, 58, 138, 0.3);
 }
 
 .save-changes-btn:disabled {

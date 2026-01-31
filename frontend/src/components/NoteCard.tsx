@@ -41,7 +41,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
           </span>
           {note.sleepStudyId && (
             <span className="meta-item">
-              <strong>Sleep Study:</strong> {note.sleepStudyId}
+              <strong>Sleep Study Id:</strong> {note.sleepStudyId}
             </span>
           )}
         </div>

@@ -1,6 +1,6 @@
 .edit-note-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+  background: #f8f9fa;
   padding: 2rem;
 }
 
@@ -59,7 +59,7 @@
 
 .spinner {
   border: 3px solid #f3f3f3;
-  border-top: 3px solid #667eea;
+  border-top: 3px solid #3b82f6;
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -170,8 +170,8 @@
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   background-color: white;
 }
 
@@ -200,14 +200,14 @@
 }
 
 .save-button {
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
   color: white;
-  box-shadow: 0 2px 8px rgba(56, 239, 125, 0.3);
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.2);
 }
 
 .save-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(56, 239, 125, 0.4);
+  box-shadow: 0 4px 16px rgba(30, 58, 138, 0.3);
 }
 
 .save-button:disabled {
@@ -235,7 +235,7 @@
 }
 
 .back-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
   color: white;
   border: none;
   padding: 0.875rem 1.75rem;
@@ -245,12 +245,12 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 1rem;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.2);
 }
 
 .back-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 16px rgba(30, 58, 138, 0.3);
 }
 
 /* Responsive Design */
