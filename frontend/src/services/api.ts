@@ -15,6 +15,10 @@ export class ApiClient {
    */
   async createNote(patientId: string, data: CreateNoteRequest): Promise<Note> {
     try {
+      console.log('Creating note for patient:', patientId);
+      console.log('API URL:', API_BASE_URL);
+      console.log('Request data:', data);
+
       const response = await fetch(`${API_BASE_URL}/patients/${patientId}/notes`, {
         method: 'POST',
         headers: {
@@ -25,13 +29,25 @@ export class ApiClient {
         body: JSON.stringify(data),
       });
 
+      console.log('Response status:', response.status);
+
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error?.message || 'Failed to create note');
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        let error;
+        try {
+          error = JSON.parse(errorText);
+        } catch {
+          throw new Error(`Failed to create note: ${response.status} ${errorText}`);
+        }
+        throw new Error(error.error?.message || error.message || 'Failed to create note');
       }
 
-      return await response.json();
+      const createdNote = await response.json();
+      console.log('Note created successfully:', createdNote);
+      return createdNote;
     } catch (error) {
+      console.error('Error in createNote:', error);
       if (error instanceof Error) {
         throw error;
       }

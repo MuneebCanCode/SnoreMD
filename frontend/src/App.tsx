@@ -206,7 +206,7 @@ function MainView({ user, signOut }: { user: any; signOut?: () => void }) {
 
 function App() {
   return (
-    <Authenticator>
+    <Authenticator hideSignUp={false}>
       {({ signOut, user }) => (
         <Router>
           <Routes>
