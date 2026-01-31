@@ -11,7 +11,7 @@ const COUNTER_TABLE_NAME = process.env.COUNTER_TABLE_NAME || 'SleepStudyCounters
  * Delete notes P0001-S005 and P0001-S006, then reset counter to 2
  */
 async function deleteNotesAndResetCounter(): Promise<void> {
-  console.log('Deleting notes P0001-S005 and P0001-S006 for patient P0001...');
+  console.log('Deleting notes P0001-S007 and P0001-S008 for patient P0001...');
   console.log(`Target table: ${TABLE_NAME}`);
   console.log(`Counter table: ${COUNTER_TABLE_NAME}`);
   console.log('');
@@ -33,16 +33,16 @@ async function deleteNotesAndResetCounter(): Promise<void> {
 
     console.log(`Found ${notes.length} notes for patient ${patientId}`);
 
-    // Filter notes with Sleep Study IDs S005 and S006
+    // Filter notes with Sleep Study IDs S007 and S008
     const notesToDelete = notes.filter(
-      (note) => note.sleepStudyId === 'P0001-S005' || note.sleepStudyId === 'P0001-S006'
+      (note) => note.sleepStudyId === 'P0001-S007' || note.sleepStudyId === 'P0001-S008'
     );
 
     console.log(`Notes to delete: ${notesToDelete.length}`);
     console.log('');
 
     if (notesToDelete.length === 0) {
-      console.log('No notes found with Sleep Study IDs P0001-S005 or P0001-S006');
+      console.log('No notes found with Sleep Study IDs P0001-S007 or P0001-S008');
     } else {
       // Delete each note
       for (const note of notesToDelete) {
