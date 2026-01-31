@@ -3,7 +3,7 @@ import { Note, CreateNoteRequest, GetNotesResponse } from '../types';
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
 // Default auth headers for development
-const DEFAULT_USER_ID = 'user-001';
+const DEFAULT_USER_ID = 'clinic-001-user-001';
 const DEFAULT_CLINIC_ID = 'clinic-001';
 
 /**
