@@ -111,6 +111,8 @@
   color: #333;
   white-space: pre-wrap;
   word-wrap: break-word;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .note-detail-grid {
