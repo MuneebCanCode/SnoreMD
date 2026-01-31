@@ -207,10 +207,6 @@ export const EditNoteView: React.FC = () => {
             </div>
           </div>
 
-          <div className="info-message" style={{ fontSize: '0.9rem', marginBottom: '1rem' }}>
-            Note: Sleep Study ID is auto-generated and cannot be edited
-          </div>
-
           <div className="form-actions">
             <button
               type="submit"

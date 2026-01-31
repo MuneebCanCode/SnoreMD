@@ -227,9 +227,6 @@ export const NoteDetailView: React.FC = () => {
 
         {isEditing && (
           <>
-            <div className="info-message-banner" style={{ fontSize: '0.9rem', marginBottom: '1rem' }}>
-              Note: Sleep Study ID is auto-generated and cannot be edited
-            </div>
             <div className="note-detail-section">
               <div className="edit-actions">
               <button
