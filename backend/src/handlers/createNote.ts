@@ -69,19 +69,18 @@ export async function handler(event: APIGatewayProxyEventV2): Promise<APIGateway
     const trimmedNoteText = validationService.trimNoteText(requestData.noteText);
 
     // Auto-generate Sleep Study ID in format: {PatientID}-S{SequenceNumber}
-    // Get current note count for this patient to determine sequence number
-    let noteCount = 0;
+    // Get the next sequence number for this patient
+    let sequenceNumber = 1;
     try {
-      noteCount = await dynamoDBService.getPatientNoteCount(patientId!);
-      console.log(`Note count for patient ${patientId}: ${noteCount}`);
-    } catch (countError) {
-      console.error('Error getting note count:', countError);
-      // If we can't get the count, default to 0 and continue
-      noteCount = 0;
+      sequenceNumber = await dynamoDBService.getNextSleepStudySequence(patientId!);
+      console.log(`Next sequence number for patient ${patientId}: ${sequenceNumber}`);
+    } catch (sequenceError) {
+      console.error('Error getting next sequence:', sequenceError);
+      // If we can't get the sequence, default to 1 and continue
+      sequenceNumber = 1;
     }
     
-    const sequenceNumber = (noteCount + 1).toString().padStart(3, '0'); // S001, S002, etc.
-    const sleepStudyId = `${patientId}-S${sequenceNumber}`;
+    const sleepStudyId = `${patientId}-S${sequenceNumber.toString().padStart(4, '0')}`; // S0001, S0002, etc.
     console.log(`Generated Sleep Study ID: ${sleepStudyId}`);
 
     // Create note object

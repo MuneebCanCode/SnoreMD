@@ -215,11 +215,13 @@ export class DynamoDBService {
     }
   }
   /**
-   * Get the count of notes for a patient
+   * Get the highest Sleep Study ID sequence number for a patient
    * Used to generate sequential Sleep Study IDs
+   * Returns the next sequence number to use
    */
-  async getPatientNoteCount(patientId: string): Promise<number> {
+  async getNextSleepStudySequence(patientId: string): Promise<number> {
     try {
+      // Query all notes for this patient to find the highest sequence number
       const command = new QueryCommand({
         TableName: TABLE_NAME,
         IndexName: 'CreatedAtIndex',
@@ -227,15 +229,34 @@ export class DynamoDBService {
         ExpressionAttributeValues: {
           ':patientId': patientId,
         },
-        Select: 'COUNT',
+        ProjectionExpression: 'sleepStudyId',
       });
 
       const result = await docClient.send(command);
-      console.log(`Query result for patient ${patientId}: Count = ${result.Count}`);
-      return result.Count || 0;
+      const notes = result.Items || [];
+      
+      console.log(`Found ${notes.length} existing notes for patient ${patientId}`);
+
+      // Extract sequence numbers from existing Sleep Study IDs
+      let maxSequence = 0;
+      for (const note of notes) {
+        if (note.sleepStudyId) {
+          // Extract sequence number from format: P0005-S001
+          const match = note.sleepStudyId.match(/-S(\d+)$/);
+          if (match) {
+            const sequence = parseInt(match[1], 10);
+            if (sequence > maxSequence) {
+              maxSequence = sequence;
+            }
+          }
+        }
+      }
+
+      console.log(`Highest existing sequence for patient ${patientId}: ${maxSequence}`);
+      return maxSequence + 1;
     } catch (error) {
-      console.error('Error getting patient note count:', error);
-      throw new Error('Failed to get patient note count from DynamoDB');
+      console.error('Error getting next sleep study sequence:', error);
+      throw new Error('Failed to get next sleep study sequence from DynamoDB');
     }
   }
 }
