@@ -1,0 +1,57 @@
+digraph "SnoreMD Patient Notes - Architecture" {
+	graph [bgcolor=white fontcolor="#2D3436" fontname="Sans-Serif" fontsize=16 label="SnoreMD Patient Notes - Architecture" nodesep=0.60 pad=0.5 rankdir=LR ranksep=0.75 splines=ortho]
+	node [fixedsize=true fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 height=1.4 imagescale=true labelloc=b shape=box style=rounded width=1.4]
+	edge [color="#7B8894"]
+	"7550a8e9f88c4de19bdf8830dba4cfe3" [label=Clinicians height=1.9 image="C:\Users\stude\AppData\Roaming\Python\Python313\site-packages\resources/onprem/client\users.png" shape=none]
+	subgraph "cluster_Frontend (React App)" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="Frontend (React App)" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"36d10eb9c4004a13b96c43b1d9f5a86b" [label="React SPA
+(Amplify Hosted)" height=2.3 image="C:\Users\stude\AppData\Roaming\Python\Python313\site-packages\resources/programming/framework\react.png" shape=none]
+	}
+	subgraph cluster_Authentication {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label=Authentication labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"6a21461746fa475abfd4167939f50494" [label="AWS Cognito
+User Pool" height=2.3 image="C:\Users\stude\AppData\Roaming\Python\Python313\site-packages\resources/aws/security\cognito.png" shape=none]
+		"9b4330dfd9ea41ac9d756847f7ebdfb0" [label="AWS AppSync
+(GraphQL API)" height=2.3 image="C:\Users\stude\AppData\Roaming\Python\Python313\site-packages\resources/aws/integration\appsync.png" shape=none]
+	}
+	subgraph "cluster_API Layer" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="API Layer" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		ef0cefbb6f984af89a12a85dd75a9f28 [label="API Gateway
+REST API" height=2.3 image="C:\Users\stude\AppData\Roaming\Python\Python313\site-packages\resources/aws/network\api-gateway.png" shape=none]
+	}
+	subgraph "cluster_Business Logic" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="Business Logic" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		f231200e929949f9a7e9fc5099f4edff [label="Create Note
+Lambda" height=2.3 image="C:\Users\stude\AppData\Roaming\Python\Python313\site-packages\resources/aws/compute\lambda.png" shape=none]
+		"70a0263041e4462f8c9f8ececf3af02f" [label="Get Notes
+Lambda" height=2.3 image="C:\Users\stude\AppData\Roaming\Python\Python313\site-packages\resources/aws/compute\lambda.png" shape=none]
+		"18571d7d53aa4634ba280f07132e4d13" [label="Update Note
+Lambda" height=2.3 image="C:\Users\stude\AppData\Roaming\Python\Python313\site-packages\resources/aws/compute\lambda.png" shape=none]
+	}
+	subgraph "cluster_Data Storage" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="Data Storage" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		bb0580ebb29140d4a9172d285a476036 [label="DynamoDB
+PatientFollowupNotes" height=2.3 image="C:\Users\stude\AppData\Roaming\Python\Python313\site-packages\resources/aws/database\dynamodb.png" shape=none]
+	}
+	subgraph cluster_Infrastructure {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label=Infrastructure labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		bc59946725b5449a8e13a1b76bd13ebc [label="AWS CDK
+(TypeScript)" height=2.3 image="C:\Users\stude\AppData\Roaming\Python\Python313\site-packages\resources/aws/management\cloudformation.png" shape=none]
+	}
+	"7550a8e9f88c4de19bdf8830dba4cfe3" -> "36d10eb9c4004a13b96c43b1d9f5a86b" [label=HTTPS dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"36d10eb9c4004a13b96c43b1d9f5a86b" -> "6a21461746fa475abfd4167939f50494" [label=Auth dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"36d10eb9c4004a13b96c43b1d9f5a86b" -> "9b4330dfd9ea41ac9d756847f7ebdfb0" [label=GraphQL dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"36d10eb9c4004a13b96c43b1d9f5a86b" -> ef0cefbb6f984af89a12a85dd75a9f28 [label="REST API" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	ef0cefbb6f984af89a12a85dd75a9f28 -> f231200e929949f9a7e9fc5099f4edff [label="POST /patients/{id}/notes" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	ef0cefbb6f984af89a12a85dd75a9f28 -> "70a0263041e4462f8c9f8ececf3af02f" [label="GET /patients/{id}/notes" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	ef0cefbb6f984af89a12a85dd75a9f28 -> "18571d7d53aa4634ba280f07132e4d13" [label="PUT /patients/{id}/notes/{noteId}" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	f231200e929949f9a7e9fc5099f4edff -> bb0580ebb29140d4a9172d285a476036 [label=Write dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"70a0263041e4462f8c9f8ececf3af02f" -> bb0580ebb29140d4a9172d285a476036 [label=Query dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"18571d7d53aa4634ba280f07132e4d13" -> bb0580ebb29140d4a9172d285a476036 [label=Update dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	bc59946725b5449a8e13a1b76bd13ebc -> ef0cefbb6f984af89a12a85dd75a9f28 [label=Deploys dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	bc59946725b5449a8e13a1b76bd13ebc -> f231200e929949f9a7e9fc5099f4edff [label=Deploys dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	bc59946725b5449a8e13a1b76bd13ebc -> "70a0263041e4462f8c9f8ececf3af02f" [label=Deploys dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	bc59946725b5449a8e13a1b76bd13ebc -> "18571d7d53aa4634ba280f07132e4d13" [label=Deploys dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	bc59946725b5449a8e13a1b76bd13ebc -> bb0580ebb29140d4a9172d285a476036 [label=Deploys dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+}
